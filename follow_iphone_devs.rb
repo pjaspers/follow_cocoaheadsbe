@@ -1,10 +1,16 @@
-# This script is designed to read the twitter using iphone developers here -> http://is.gd/hlhV and follow them with your twitter account
-# plug in your google and twitter account details below
-# Credit for this script goes to David Clements
-# See his blog post here -> http://shortpath.blogspot.com/2009/01/follow-over-100-iphone-developers-on.html
-# You'll need the google spreadsheet gem (http://github.com/gimite/google-spreadsheet-ruby/tree/master) and the twitter gem
+# This script is designed to read the list of users here: http://spreadsheets.google.com/ccc?key=pA2sIvlHaiZUVkzPjkZ7Dcg and follow them with your twitter account.
+#
+# Plug in your Google and Twitter account details below.
+#
+# Credit for this script goes to David Clements.
+# http://shortpath.blogspot.com/2009/01/follow-over-100-iphone-developers-on.html
+#
+# IMPORTANT NOTE:
+# You'll need the Google Spreadsheet gem (http://github.com/gimite/google-spreadsheet-ruby/tree/master) and the Twitter gem
 
-# You may want to change the 1..1000 below so it only adds 10 followers at a time (every hour or so).  Twitter will like you more then
+# You may want to change the 1..1000 below so it only adds 10 followers at a time (every hour or so). 
+# Twitter will like you more then.
+
 require "rubygems"
 require "google_spreadsheet"
 require 'twitter'
@@ -16,7 +22,7 @@ twitter_pw    = "XXXXXXX"
 
 session = GoogleSpreadsheet.login(google_user, google_pw)
 
-ws = session.spreadsheet_by_key("p3LA_Q08eM-VAAyq03ZSjYQ").worksheets[0]
+ws = session.spreadsheet_by_key("pA2sIvlHaiZUVkzPjkZ7Dcg").worksheets[0]
 
 base =  Twitter::Base.new(twitter_user, twitter_pw)
 
