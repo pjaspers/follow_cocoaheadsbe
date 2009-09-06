@@ -12,11 +12,13 @@ require "google_spreadsheet"
 require 'twitter'
 require 'activesupport'
 
-google_user = "your_google_user"
-google_pw   = "your_google_pass"
-twitter_user  = "your_twitter_handle"
-twitter_pw    = "your_twitter_pass"
-
+google_user = "xxxxxxxxxx"
+google_pw   = "xxxxxxxxxx"
+twitter_user  = "xxxxxxxxxx"
+twitter_pw    = "xxxxxxxxxx"
+# set it as you like
+open_url_in_safari = true
+follow_on_twitter = false
 session = GoogleSpreadsheet.login(google_user, google_pw)
 
 ws = session.spreadsheet_by_key("0AnofOeVdrQL-dG9DdksyWWM0dFMxdDlMUUU0SlZNWkE").worksheets[0]
@@ -25,23 +27,29 @@ ws = session.spreadsheet_by_key("0AnofOeVdrQL-dG9DdksyWWM0dFMxdDlMUUU0SlZNWkE").
 httpauth = Twitter::HTTPAuth.new(twitter_user, twitter_pw)
 client = Twitter::Base.new(httpauth)
 
-for row in 1..ws.num_rows
-  fullname = ws[row,1]
-  user = ws[row,2]
+# Skip the header
+for row in 2..ws.num_rows
+  fullname  = ws[row,1]
+  user      = ws[row,2]
+  url       = ws[row,3]
   user.tr!("@","")
-  # As seen on http://blog.10to1.be/rails/2009/08/14/present/
-  # But I did have to require activesupport for it to work
-  
-  if user.present?
-    puts "Attempting to follow #{fullname} (@#{user})"
-   begin
-           client.friendship_create(user)
-           puts "success"
-   rescue
-           puts "******* Failed  #{$!.message}"
-   end
-  else
-    puts "Can't find twitter for #{fullname}"
+  if follow_on_twitter
+    # As seen on http://blog.10to1.be/rails/2009/08/14/present/
+    # But I did have to require activesupport for it to work
+    if user.present?
+      puts "Attempting to follow #{fullname} (@#{user})"
+     begin
+             client.friendship_create(user)
+             puts "success"
+     rescue
+             puts "******* Failed  #{$!.message}"
+     end
+    else
+      puts "Can't find twitter for #{fullname}"
+    end
   end
-    
+  
+  if url.present? and open_url_in_safari
+    `open -a safari #{url}`
+  end
 end
